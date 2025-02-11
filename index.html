@@ -5,20 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sidebar collapse styles */
+        aside {
+            transition: width 0.3s ease;
+            width: 250px;
+        }
+
+        aside.collapsed {
+            width: 80px;
+        }
+
+        aside.collapsed .brand-name,
+        aside.collapsed .item-name {
+            display: none;
+        }
+
+        aside.collapsed + main {
+            margin-left: 80px;
+        }
+
+        .menu-btn {
+            transition: transform 0.3s ease;
+        }
+
+        aside.collapsed .menu-btn {
+            transform: rotate(360deg);
+            transform: translateX(24px);
+        }
+
+        main {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: none;
+            }
+            
+            aside {
+                width: 80px;
+            }
+
+            aside .brand-name,
+            aside .item-name {
+                display: none;
+            }
+
+            main {
+                margin-left: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <aside>
         <button class="menu-btn fa fa-chevron-left"></button>
-        <a href="/" class="logo-wrapper">
+        <a href="#" class="logo-wrapper">
           <span class="fa-brands fa-uikit"></span>
-          <span class="brand-name">Smart UI Studio</span>
+          <span class="brand-name">Car Rental</span>
         </a>
         <div class="separator"></div>
         <ul class="menu-items">
           <li><a href="#"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a><span
               class="tooltip">Home</span>
           </li>
-          <li><a href="#"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a>
+          <li><a href="dashboard.html"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a>
             <span class="tooltip">Dashboard</span>
           </li>
           <li><a href="#"><span class="icon fa fa-chart-line"></span><span class="item-name">Analytics</span></a>
@@ -33,12 +86,19 @@
           <li><a href="#"><span class="icon fa fa-gear"></span><span class="item-name">Settings</span></a>
             <span class="tooltip">Settings</span>
           </li>
-          <li><a href="#"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a>
+          <li><a href="contact.html"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a>
             <span class="tooltip">Contact</span>
           </li>
         </ul>
-      </aside>
-      <main></main>
-</body>
+    </aside>
+    <main></main>
     <script src="main.js"></script>
+    <script>
+        // Collapse function
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const aside = document.querySelector('aside');
+            aside.classList.toggle('collapsed');
+        });
+    </script>
+</body>
 </html>

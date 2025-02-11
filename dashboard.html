@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Car Rental</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sidebar collapse styles */
+        aside {
+            transition: width 0.3s ease;
+            width: 250px;
+        }
+
+        aside.collapsed {
+            width: 80px;
+        }
+
+        aside.collapsed .brand-name,
+        aside.collapsed .item-name {
+            display: none;
+        }
+
+        aside.collapsed + main {
+            margin-left: 80px;
+        }
+
+        .menu-btn {
+            transition: transform 0.3s ease;
+        }
+
+        aside.collapsed .menu-btn {
+            transform: rotate(360deg) translateX(24px);
+        }
+
+        main {
+            margin-left: 2px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            /* display: grid; */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            /* column-gap: 12px; */
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            transition: all 0.3s ease;
+            margin-bottom: 29px;
+        }
+        /* When sidebar is collapsed, make cards bigger */
+        aside.collapsed + main .dashboard-card {
+            padding: 25px;
+            font-size: 1.1em;
+        }
+
+        aside.collapsed + main .stat-value {
+            font-size: 1.8em;
+        }
+
+        aside.collapsed + main .stat-label {
+            font-size: 1em;
+        }
+
+        .dashboard-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.02);
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: font-size 0.3s ease;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            transition: font-size 0.3s ease;
+        }
+
+        .recent-rentals {
+            margin-top: 20px;
+        }
+
+        .rental-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .car-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-available { background: #4CAF50; }
+        .status-rented { background: #f44336; }
+        .status-maintenance { background: #FFC107; }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                grid-template-columns: 23fr;
+                transform: translateX(-190px);
+            }
+
+            .menu-btn {
+                display: none;
+            }
+            
+            aside {
+                width: 80px;
+            }
+
+            aside .brand-name,
+            aside .item-name {
+                display: none;
+            }
+
+            main {
+                margin-left: 80px;
+            }
+
+            .dashboard-card {
+                padding: 25px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <button class="menu-btn fa fa-chevron-left"></button>
+        <a href="#" class="logo-wrapper">
+            <span class="fa-brands fa-uikit"></span>
+            <span class="brand-name">Car Rental</span>
+        </a>
+        <div class="separator"></div>
+        <ul class="menu-items">
+            <li><a href="index.html"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a><span class="tooltip">Home</span></li>
+            <li><a href="dashboard.html"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+            <li><a href="#"><span class="icon fa fa-chart-line"></span><span class="item-name">Analytics</span></a><span class="tooltip">Analytics</span></li>
+            <li><a href="#"><span class="icon fa fa-chart-simple"></span><span class="item-name">Leaderboard</span></a><span class="tooltip">Leaderboard</span></li>
+            <li><a href="#"><span class="icon fa fa-user"></span><span class="item-name">Account</span></a><span class="tooltip">Account</span></li>
+            <li><a href="#"><span class="icon fa fa-gear"></span><span class="item-name">Settings</span></a><span class="tooltip">Settings</span></li>
+            <li><a href="contact.html"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a><span class="tooltip">Contact</span></li>
+        </ul>
+    </aside>
+    <main>
+        <div class="dashboard-container">
+            <div class="dashboard-card">
+                <h3>Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Total Cars</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Active Rentals</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div class="stat-label">Available Cars</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">22</div>
+                        <div class="stat-label">Maintenance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Recent Rentals</h3>
+                <div class="recent-rentals">
+                    <div class="rental-item">
+                        <span>Toyota Camry</span>
+                        <span>2h ago</span>
+                    </div>
+                    <div class="rental-item">
+                        <span>Honda Civic</span>
+                        <span>5h ago</span>
+                    </div>
+                    <div class="rental-item">
+                        <span>Tesla Model 3</span>
+                        <span>1d ago</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Car Status</h3>
+                <div class="car-status">
+                    <span class="status-dot status-available"></span>
+                    <span>Available (45)</span>
+                </div>
+                <div class="car-status">
+                    <span class="status-dot status-rented"></span>
+                    <span>Rented (89)</span>
+                </div>
+                <div class="car-status">
+                    <span class="status-dot status-maintenance"></span>
+                    <span>Maintenance (22)</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="main.js"></script>
+    <script>
+        // Updated collapse function
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const aside = document.querySelector('aside');
+            aside.classList.toggle('collapsed');
+            
+            // Rotate button icon
+            this.style.transform = aside.classList.contains('collapsed') ? 'rotate(360deg) translateX(24px)' : '';
+        });
+    </script>
+</body>
+</html>
