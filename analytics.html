@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Car Rental</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        aside {
+            transition: width 0.3s ease;
+            width: 250px;
+        }
+
+        aside.collapsed {
+            width: 80px;
+        }
+
+        aside.collapsed .brand-name,
+        aside.collapsed .item-name {
+            display: none;
+        }
+
+        aside.collapsed + main {
+            margin-left: 80px;
+        }
+
+        .menu-btn {
+            transition: transform 0.3s ease;
+        }
+
+        aside.collapsed .menu-btn {
+            transform: rotate(360deg) translateX(24px);
+        }
+
+        main {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .analytics-container {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-300px);
+        }
+
+        aside.collapsed + main .card {
+            transform: translateX(15px);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .stat {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #4CAF50;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .trend {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            color: #4CAF50;
+        }
+
+        .trend.negative {
+            color: #FF5252;
+        }
+
+        .trend i {
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: none;
+            }
+            
+            aside {
+                width: 80px;
+            }
+
+            aside .brand-name,
+            aside .item-name {
+                display: none;
+            }
+
+            main {
+                margin-left: 80px;
+            }
+
+            .analytics-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 15px;
+                transform: translateX(0);
+                width: 100%;
+            }
+
+            .chart-container {
+                height: 200px;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <button class="menu-btn fa fa-chevron-left"></button>
+        <a href="/" class="logo-wrapper">
+            <span class="fa-brands fa-uikit"></span>
+            <span class="brand-name">Car Rental</span>
+        </a>
+        <div class="separator"></div>
+        <ul class="menu-items">
+            <li><a href="index.html"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a><span class="tooltip">Home</span></li>
+            <li><a href="dashboard.html"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+            <li><a href="#"><span class="icon fa fa-chart-line"></span><span class="item-name">Analytics</span></a><span class="tooltip">Analytics</span></li>
+            <li><a href="#"><span class="icon fa fa-chart-simple"></span><span class="item-name">Leaderboard</span></a><span class="tooltip">Leaderboard</span></li>
+            <li><a href="#"><span class="icon fa fa-user"></span><span class="item-name">Account</span></a><span class="tooltip">Account</span></li>
+            <li><a href="#"><span class="icon fa fa-gear"></span><span class="item-name">Settings</span></a><span class="tooltip">Settings</span></li>
+            <li><a href="contact.html"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a><span class="tooltip">Contact</span></li>
+        </ul>
+    </aside>
+    <main>
+        <div class="analytics-container">
+            <div class="card">
+                <h3>Total Rentals</h3>
+                <div class="stat">1,234</div>
+                <div class="trend">
+                    <i class="fa fa-arrow-up"></i>
+                    <span>12% from last month</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rentalsChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Revenue</h3>
+                <div class="stat">$45,678</div>
+                <div class="trend">
+                    <i class="fa fa-arrow-up"></i>
+                    <span>8% from last month</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Active Users</h3>
+                <div class="stat">892</div>
+                <div class="trend negative">
+                    <i class="fa fa-arrow-down"></i>
+                    <span>3% from last month</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="usersChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Customer Satisfaction</h3>
+                <div class="stat">4.8/5</div>
+                <div class="trend">
+                    <i class="fa fa-arrow-up"></i>
+                    <span>5% from last month</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="main.js"></script>
+    <script>
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const aside = document.querySelector('aside');
+            aside.classList.toggle('collapsed');
+            
+            this.style.transform = aside.classList.contains('collapsed') ? 'rotate(360deg) translateX(24px)' : '';
+        });
+
+        // Rentals Line Chart
+        const rentalsCtx = document.getElementById('rentalsChart').getContext('2d');
+        new Chart(rentalsCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Monthly Rentals',
+                    data: [800, 950, 1100, 980, 1200, 1234],
+                    borderColor: '#4CAF50',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Revenue Bar Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Monthly Revenue',
+                    data: [30000, 35000, 38000, 40000, 42000, 45678],
+                    backgroundColor: '#2196F3'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Users Area Chart
+        const usersCtx = document.getElementById('usersChart').getContext('2d');
+        new Chart(usersCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Active Users',
+                    data: [750, 820, 880, 920, 900, 892],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 82, 82, 0.2)',
+                    borderColor: '#FF5252'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Satisfaction Pie Chart
+        const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'pie',
+            data: {
+                labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+                datasets: [{
+                    data: [60, 25, 10, 3, 2],
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#8BC34A',
+                        '#FFC107',
+                        '#FF9800',
+                        '#FF5252'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+</body>
+</html>
