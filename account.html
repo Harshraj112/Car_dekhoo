@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Car Rental</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+        aside {
+            transition: width 0.3s ease;
+            width: 250px;
+        }
+
+        .account-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            transform: translateX(-20rem);
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .account-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .account-section {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .rental-card {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .rental-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .rental-info {
+            flex: 1;
+        }
+
+        .rental-info h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .rental-info p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .rental-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-completed {
+            background: #2196F3;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #f44336;
+            color: white;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4CAF50;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chat-bot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-bot-button:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .account-container {
+                padding: 10px;
+                transform: none;
+            }
+
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .account-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        main {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease, transform 0.3s ease;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        aside.collapsed + main {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+
+        aside.collapsed ~ main .account-container {
+            transform: translateX(-4rem);
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <button class="menu-btn fa fa-chevron-left"></button>
+        <a href="#" class="logo-wrapper">
+            <span class="fa-brands fa-uikit"></span>
+            <span class="brand-name">Car Rental</span>
+        </a>
+        <div class="separator"></div>
+        <ul class="menu-items">
+            <li><a href="index.html"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a><span class="tooltip">Home</span></li>
+            <li><a href="dashboard.html"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+            <li><a href="analytics.html"><span class="icon fa fa-chart-line"></span><span class="item-name">Analytics</span></a><span class="tooltip">Analytics</span></li>
+            <li><a href="leaderboard.html"><span class="icon fa fa-chart-simple"></span><span class="item-name">Leaderboard</span></a><span class="tooltip">Leaderboard</span></li>
+            <li><a href="#" class="active"><span class="icon fa fa-user"></span><span class="item-name">Account</span></a><span class="tooltip">Account</span></li>
+            <li><a href="system.html"><span class="icon fa fa-gear"></span><span class="item-name">Settings</span></a><span class="tooltip">Settings</span></li>
+            <li><a href="contact.html"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a><span class="tooltip">Contact</span></li>
+        </ul>
+    </aside>
+
+    <main>
+        <div class="account-container">
+            <div class="account-header">
+                <img src="/Car_dekhoo/Images/Tony_stark.png" alt="Profile Picture" class="profile-picture" >
+                <div class="profile-info">
+                    <h1>Tony Stark(RDJ)</h1>
+                    <p>Premium Member</p>
+                    <p>Member since January 2024</p>
+                </div>
+            </div>
+
+            <div class="account-grid">
+                <!-- Current Rentals Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Current Rentals</h2>
+                        <button class="btn btn-outline">View All</button>
+                    </div>
+                    <div class="rental-card">
+                        <img src="https://images.unsplash.com/photo-1550355291-bbee04a92027" alt="Tesla Model S" class="rental-image">
+                        <div class="rental-info">
+                            <h3>Tesla Model S</h3>
+                            <p>Rental Period: 15 Mar - 20 Mar</p>
+                            <p>Location: Patna, India</p>
+                            <span class="rental-status status-active">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Payment Methods</h2>
+                        <button class="btn btn-outline">Add New</button>
+                    </div>
+                    <div class="payment-method">
+                        <i class="fa fa-credit-card card-icon"></i>
+                        <div>
+                            <h3>**** **** **** 4242</h3>
+                            <p>Expires 12/25</p>
+                        </div>
+                    </div>
+                    <div class="payment-method">
+                        <i class="fa fa-credit-card card-icon"></i>
+                        <div>
+                            <h3>**** **** **** 8753</h3>
+                            <p>Expires 08/26</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rental History Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Rental History</h2>
+                        <button class="btn btn-outline">View All</button>
+                    </div>
+                    <div class="rental-card">
+                        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341" alt="Range Rover Sport" class="rental-image">
+                        <div class="rental-info">
+                            <h3>Range Rover Sport</h3>
+                            <p>Rental Period: 1 Mar - 5 Mar</p>
+                            <p>Location: Danapur, India</p>
+                            <span class="rental-status status-completed">Completed</span>
+                        </div>
+                    </div>
+                    <div class="rental-card">
+                        <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2" alt="BMW 5 Series" class="rental-image">
+                        <div class="rental-info">
+                            <h3>BMW 5 Series</h3>
+                            <p>Rental Period: 20 Feb - 25 Feb</p>
+                            <p>Location: Boaring Road, India</p>
+                            <span class="rental-status status-completed">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Notifications</h2>
+                        <button class="btn btn-outline">Settings</button>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa fa-bell"></i>
+                        </div>
+                        <div>
+                            <h3>Upcoming Rental</h3>
+                            <p>Your Tesla Model S rental starts tomorrow</p>
+                            <small>2 hours ago</small>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <div>
+                            <h3>Payment Successful</h3>
+                            <p>Payment for Range Rover Sport rental processed</p>
+                            <small>1 day ago</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Settings Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Profile Settings</h2>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" value="Tony Stark">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="rdj@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-input" value="+91 62627762">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-input" value="123 Street Park, India">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Preferences Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Preferences</h2>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">Language</label>
+                            <select class="form-input">
+                                <option>English</option>
+                                <option>Hindi</option>
+                                <option>Bengali</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Currency</label>
+                            <select class="form-input">
+                                <option>Indian Rupee (₹)</option>
+                                <option>US Dollar ($)</option>
+                                <option>Euro (€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Notifications</label>
+                            <div style="display: flex; gap: 10px; margin-top: 5px;">
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" checked> Rental Updates
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" checked> Promotions
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chat Bot Button -->
+    <button class="chat-bot-button" id="chatBotBtn">
+        <i class="fa fa-comments"></i>
+    </button>
+
+    <script src="main.js"></script>
+    <script>
+        // Collapse function
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const aside = document.querySelector('aside');
+            aside.classList.toggle('collapsed');
+            this.style.transform = aside.classList.contains('collapsed') ? 'rotate(360deg) translateX(24px)' : '';
+        });
+
+        // Chat Bot Button
+        const chatBotBtn = document.getElementById('chatBotBtn');
+        const logoWrapper = document.querySelector('.logo-wrapper');
+
+        chatBotBtn.addEventListener('click', () => {
+            // Chat bot open logic
+            console.log('Chat bot clicked');
+        });
+
+        // Add logo click handler to close chat
+        logoWrapper.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Chat bot close logic
+            console.log('Logo clicked');
+        });
+    </script>
+</body>
+</html>

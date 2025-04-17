@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - Car Rental</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --menu-width: 89px;
+            --collapsed-width: 60px;
+        }
+
+        aside {
+            transition: width 0.3s ease;
+            width: 250px;
+        }
+
+        aside.collapsed {
+            width: 80px;
+        }
+
+        aside.collapsed .brand-name,
+        aside.collapsed .item-name {
+            display: none;
+        }
+
+        aside.collapsed + main {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+
+        .menu-btn {
+            transition: transform 0.3s ease;
+        }
+
+        aside.collapsed .menu-btn {
+            transform: rotate(360deg) translateX(24px);
+        }
+
+        main {
+            margin-left: 250px;
+            transition: margin-left 0.3s ease, transform 0.3s ease;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .settings-container {
+            max-width: 900px;
+            margin: 0 auto;
+            transform: translateX(-200px);
+            transition: transform 0.3s ease;
+        }
+
+        aside.collapsed ~ main .settings-container {
+            transform: translateX(-100px);
+        }
+
+        .settings-section {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .settings-section h2 {
+            margin-top: 0;
+            color: #4CAF50;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .settings-group {
+            margin-bottom: 20px;
+        }
+
+        .settings-group h3 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            flex: 1;
+        }
+
+        .setting-description {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Select Dropdown */
+        .select-dropdown {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .select-dropdown option {
+            background-color: #333;
+            color: white;
+        }
+
+        /* Button Styles */
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .btn-danger {
+            background-color: #f44336;
+        }
+
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Chat Bot Styles */
+        .chat-bot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-bot-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-bot-button i {
+            font-size: 24px;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .send-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                margin-left: 80px;
+            }
+            
+            .settings-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <button class="menu-btn fa fa-chevron-left"></button>
+        <a href="#" class="logo-wrapper">
+            <span class="fa-brands fa-uikit"></span>
+            <span class="brand-name">Car Rental</span>
+        </a>
+        <div class="separator"></div>
+        <ul class="menu-items">
+            <li><a href="index.html"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a><span class="tooltip">Home</span></li>
+            <li><a href="dashboard.html"><span class="icon fa fa-layer-group"></span><span class="item-name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+            <li><a href="analytics.html"><span class="icon fa fa-chart-line"></span><span class="item-name">Analytics</span></a><span class="tooltip">Analytics</span></li>
+            <li><a href="leaderboard.html"><span class="icon fa fa-chart-simple"></span><span class="item-name">Leaderboard</span></a><span class="tooltip">Leaderboard</span></li>
+            <li><a href="account.html"><span class="icon fa fa-user"></span><span class="item-name">Account</span></a><span class="tooltip">Account</span></li>
+            <li><a href="#"><span class="icon fa fa-gear"></span><span class="item-name">Settings</span></a><span class="tooltip">Settings</span></li>
+            <li><a href="contact.html"><span class="icon fa fa-comment-dots"></span><span class="item-name">Contact</span></a><span class="tooltip">Contact</span></li>
+        </ul>
+    </aside>
+    <main>
+        <div class="settings-container">
+            <h1>System Settings</h1>
+            
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h2>Account Settings</h2>
+                <div class="settings-group">
+                    <h3>Profile Information</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Email Notifications</div>
+                            <div class="setting-description">Receive email updates about your account and rentals</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>SMS Notifications</div>
+                            <div class="setting-description">Receive text messages about your rentals and promotions</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Two-Factor Authentication</div>
+                            <div class="setting-description">Add an extra layer of security to your account</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Settings -->
+            <div class="settings-section">
+                <h2>Privacy Settings</h2>
+                <div class="settings-group">
+                    <h3>Data Sharing</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Share Rental History</div>
+                            <div class="setting-description">Allow us to use your rental history to improve our services</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Location Services</div>
+                            <div class="setting-description">Allow us to access your location for better service</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Marketing Communications</div>
+                            <div class="setting-description">Receive marketing emails and promotions</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- App Settings -->
+            <div class="settings-section">
+                <h2>App Settings</h2>
+                <div class="settings-group">
+                    <h3>Display Preferences</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Theme</div>
+                            <div class="setting-description">Choose your preferred color theme</div>
+                        </div>
+                        <select class="select-dropdown">
+                            <option>Dark (Default)</option>
+                            <option>Light</option>
+                            <option>System</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Language</div>
+                            <div class="setting-description">Select your preferred language</div>
+                        </div>
+                        <select class="select-dropdown">
+                            <option>English</option>
+                            <option>Spanish</option>
+                            <option>French</option>
+                            <option>German</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Currency</div>
+                            <div class="setting-description">Select your preferred currency</div>
+                        </div>
+                        <select class="select-dropdown">
+                            <option>USD ($)</option>
+                            <option>EUR (€)</option>
+                            <option>GBP (£)</option>
+                            <option>JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Notification Preferences</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Rental Reminders</div>
+                            <div class="setting-description">Get reminded about upcoming and current rentals</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Special Offers</div>
+                            <div class="setting-description">Receive notifications about special offers and discounts</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Service Updates</div>
+                            <div class="setting-description">Get notified about service updates and maintenance</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Settings -->
+            <div class="settings-section">
+                <h2>Security Settings</h2>
+                <div class="settings-group">
+                    <h3>Account Security</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Change Password</div>
+                            <div class="setting-description">Update your account password</div>
+                        </div>
+                        <button class="btn btn-secondary">Change</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Login History</div>
+                            <div class="setting-description">View your recent login activity</div>
+                        </div>
+                        <button class="btn btn-secondary">View</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Connected Devices</div>
+                            <div class="setting-description">Manage devices connected to your account</div>
+                        </div>
+                        <button class="btn btn-secondary">Manage</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Management -->
+            <div class="settings-section">
+                <h2>Data Management</h2>
+                <div class="settings-group">
+                    <h3>Your Data</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Download Your Data</div>
+                            <div class="setting-description">Get a copy of all your personal data</div>
+                        </div>
+                        <button class="btn btn-secondary">Download</button>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <div>Delete Account</div>
+                            <div class="setting-description">Permanently delete your account and all associated data</div>
+                        </div>
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn">Save Changes</button>
+                <button class="btn btn-secondary">Reset to Default</button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Chat Bot Button and Container -->
+    <button class="chat-bot-button" id="chatBotBtn">
+        <i class="fa fa-comments"></i>
+    </button>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h3>Car Assistant</h3>
+            <button class="close-chat" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+            <button class="send-button" id="sendMessage">Send</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // Collapse function
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const aside = document.querySelector('aside');
+            aside.classList.toggle('collapsed');
+            
+            // Rotate button icon
+            this.style.transform = aside.classList.contains('collapsed') ? 'rotate(360deg) translateX(24px)' : '';
+        });
+
+        // Chat Bot Functionality
+        const chatBotBtn = document.getElementById('chatBotBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        const closeChat = document.getElementById('closeChat');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const chatMessages = document.getElementById('chatMessages');
+        const logoWrapper = document.querySelector('.logo-wrapper');
+
+        chatBotBtn.addEventListener('click', () => {
+            chatContainer.classList.add('active');
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatContainer.classList.remove('active');
+        });
+
+        // Add logo click handler to close chat
+        logoWrapper.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            chatContainer.classList.remove('active');
+        });
+
+        function addMessage(message, isUser = true) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.margin = '10px 0';
+            messageDiv.style.padding = '10px';
+            messageDiv.style.borderRadius = '10px';
+            messageDiv.style.maxWidth = '80%';
+            messageDiv.style.wordWrap = 'break-word';
+            
+            if (isUser) {
+                messageDiv.style.marginLeft = 'auto';
+                messageDiv.style.background = '#4CAF50';
+                messageDiv.style.color = 'white';
+            } else {
+                messageDiv.style.marginRight = 'auto';
+                messageDiv.style.background = '#f0f0f0';
+            }
+            
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        sendMessage.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message);
+                chatInput.value = '';
+                // Here you can add your AI response logic
+                setTimeout(() => {
+                    addMessage('Ye kr diyaa BSDK, Ab paise 3-5K ke bich me hi rhegi!!', false);
+                }, 1000);
+            }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage.click();
+            }
+        });
+    </script>
+</body>
+</html>
