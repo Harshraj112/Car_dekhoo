@@ -1,6 +1,6 @@
 # 🚗 CarDekho Clone – Frontend Project
 
-This is a frontend clone of the popular **CarDekho** website, built as part of a personal project to practice modern web development using **HTML**, **CSS**, **Bootstrap**, and **JavaScript**. The project is focused entirely on frontend development and does **not include backend or database integration**.
+This is a website built as part of a personal project to practice modern web development using **HTML**, **CSS**, **Bootstrap**, and **JavaScript**. The project is focused entirely on frontend development and does **not include backend or database integration**.
 
 ## 🔧 Tech Stack Used
 
